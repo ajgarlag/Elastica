@@ -123,7 +123,7 @@ class NormalizeAggregationTest extends BaseAggregationTest
      */
     public function testNormalizeAggregation(): void
     {
-        $this->_checkVersion('7.9');
+        // $this->_checkVersion('7.9');
 
         $index = $this->getIndexForTest();
 

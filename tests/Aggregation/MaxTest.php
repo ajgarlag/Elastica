@@ -76,7 +76,7 @@ class MaxTest extends BaseAggregationTest
     public function testMaxAggregationWithMissing(): void
     {
         // feature is buggy on version prior 7.5;
-        $this->_checkVersion('7.5');
+        // $this->_checkVersion('7.5');
 
         $index = $this->_getIndexForTest();
 

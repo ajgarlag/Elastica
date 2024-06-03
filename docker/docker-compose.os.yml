@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
     os01:
-        image: &image opensearchproject/opensearch:${OS_VERSION:-2.14.0}
+        image: &image opensearchproject/opensearch:${OS_VERSION:-1.3.16}
         command: &command >
             /bin/sh -c "./bin/opensearch-plugin list | grep -q ingest-attachment
             || ./bin/opensearch-plugin install --batch ingest-attachment;

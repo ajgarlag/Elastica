@@ -1,0 +1,50 @@
+version: '3.4'
+
+services:
+    os01:
+        image: &image opensearchproject/opensearch:${OS_VERSION:-2.14.0}
+        command: &command >
+            /bin/sh -c "./bin/opensearch-plugin list | grep -q ingest-attachment
+            || ./bin/opensearch-plugin install --batch ingest-attachment;
+            chown opensearch /usr/share/opensearch/repository;
+            /usr/share/opensearch/opensearch-docker-entrypoint.sh"
+        environment: &environment
+            node.name: os01
+            cluster.name: os-docker-cluster
+            cluster.initial_master_nodes: os01
+            discovery.seed_hosts: os01
+            bootstrap.memory_lock: 'true'
+            plugins.security.disabled: 'true'
+            path.repo: /usr/share/opensearch/repository
+            OPENSEARCH_INITIAL_ADMIN_PASSWORD: F0o&B4r%=
+            OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+        ulimits: &ulimits
+            memlock:
+                soft: -1
+                hard: -1
+        volumes:
+            - data01:/usr/share/opensearch/data
+            - osrepo:/usr/share/opensearch/repository
+        ports:
+            - 9200:9200
+        networks: &networks
+            - open
+    os02:
+        image: *image
+        command: *command
+        environment:
+            <<: *environment
+            node.name: os02
+        ulimits: *ulimits
+        volumes:
+            - data02:/usr/share/opensearch/data
+            - osrepo:/usr/share/opensearch/repository
+        networks: *networks
+volumes:
+    data01:
+    data02:
+    osrepo:
+
+networks:
+    open:
+        driver: bridge

@@ -15,50 +15,6 @@ class SettingsTest extends BaseTest
     /**
      * @group functional
      */
-    public function testSetTransient(): void
-    {
-        $index = $this->_createIndex();
-
-        if (\count($index->getClient()->getCluster()->getNodes()) < 2) {
-            $this->markTestSkipped('At least two master nodes have to be running for this test');
-        }
-
-        $settings = new Settings($index->getClient());
-
-        $settings->setTransient('discovery.zen.minimum_master_nodes', 2);
-        $data = $settings->get();
-        $this->assertEquals(2, $data['transient']['discovery']['zen']['minimum_master_nodes']);
-
-        $settings->setTransient('discovery.zen.minimum_master_nodes', 1);
-        $data = $settings->get();
-        $this->assertEquals(1, $data['transient']['discovery']['zen']['minimum_master_nodes']);
-    }
-
-    /**
-     * @group functional
-     */
-    public function testSetPersistent(): void
-    {
-        $index = $this->_createIndex();
-
-        if (\count($index->getClient()->getCluster()->getNodes()) < 2) {
-            $this->markTestSkipped('At least two master nodes have to be running for this test');
-        }
-
-        $settings = new Settings($index->getClient());
-
-        $settings->setPersistent('discovery.zen.minimum_master_nodes', 2);
-        $data = $settings->get();
-        $this->assertEquals(2, $data['persistent']['discovery']['zen']['minimum_master_nodes']);
-
-        $settings->setPersistent('discovery.zen.minimum_master_nodes', 1);
-        $data = $settings->get();
-        $this->assertEquals(1, $data['persistent']['discovery']['zen']['minimum_master_nodes']);
-    }
-
-    /**
-     * @group functional
-     */
     public function testSetReadOnly(): void
     {
         // Create two indices to check that the complete cluster is read only

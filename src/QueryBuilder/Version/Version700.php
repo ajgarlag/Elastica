@@ -98,7 +98,6 @@ class Version700 extends Version
         'serial_diff',
         'weighted_avg',
         'composite',
-        'normalize',
     ];
 
     protected $suggesters = [

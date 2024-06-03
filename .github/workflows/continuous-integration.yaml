@@ -26,7 +26,7 @@ jobs:
 
   phpunit:
     runs-on: 'ubuntu-20.04'
-    name: 'PHPUnit (PHP ${{ matrix.php }}, ES ${{ matrix.elasticsearch }})'
+    name: 'PHPUnit (PHP ${{ matrix.php }}, OS ${{ matrix.opensearch }})'
     timeout-minutes: 10
     strategy:
       matrix:
@@ -38,13 +38,13 @@ jobs:
           - '8.1'
         dependencies:
           - 'highest'
-        elasticsearch:
-          - '7.15.2'
+        opensearch:
+          - '2.14.0'
         include:
           # Test with the lowest set of dependencies
           - dependencies: 'lowest'
             php: '7.2'
-            elasticsearch: '7.15.2'
+            opensearch: '2.14.0'
       fail-fast: false
     steps:
       - name: 'Checkout'
@@ -68,15 +68,15 @@ jobs:
         run: |
           vendor/bin/phpunit --group unit --coverage-clover=build/coverage/unit-coverage.xml
 
-      - name: 'Setup Elasticsearch'
+      - name: 'Setup opensearch'
         run: |
           sudo swapoff -a
           sudo sysctl -w vm.swappiness=1
           sudo sysctl -w fs.file-max=262144
           sudo sysctl -w vm.max_map_count=262144
-          ES_VERSION=${{ matrix.elasticsearch }} docker-compose --file=docker/docker-compose.proxy.yml --file=docker/docker-compose.es.yml up --detach
-          docker run --rm --network=docker_elastic curlimages/curl --max-time 120 --retry-max-time 120 --retry 120 --retry-delay 5 --retry-all-errors --show-error --silent http://es01:9200
-          docker run --rm --network=docker_elastic curlimages/curl --max-time 120 --retry-max-time 120 --retry 120 --retry-delay 5 --retry-all-errors --show-error --silent http://es02:9200
+          OS_VERSION=${{ matrix.opensearch }} docker-compose --file=docker/docker-compose.proxy.yml --file=docker/docker-compose.os.yml up --detach
+          docker run --rm --network=docker_open curlimages/curl --max-time 120 --retry-max-time 120 --retry 120 --retry-delay 5 --retry-all-errors --show-error --silent http://os01:9200
+          docker run --rm --network=docker_open curlimages/curl --max-time 120 --retry-max-time 120 --retry 120 --retry-delay 5 --retry-all-errors --show-error --silent http://os02:9200
 
       - name: 'Run functional tests'
         run: |
@@ -89,14 +89,14 @@ jobs:
 
   phpstan:
     runs-on: 'ubuntu-20.04'
-    name: 'PHPStan (PHP ${{ matrix.php }}, ES ${{ matrix.elasticsearch }})'
+    name: 'PHPStan (PHP ${{ matrix.php }}, OS ${{ matrix.opensearch }})'
     timeout-minutes: 10
     strategy:
       matrix:
         php:
           - '8.1'
-        elasticsearch:
-          - '7.15.2'
+        opensearch:
+          - ''
       fail-fast: false
     steps:
       - name: 'Checkout'

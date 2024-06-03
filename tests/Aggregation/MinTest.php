@@ -35,7 +35,7 @@ class MinTest extends BaseAggregationTest
     public function testMinAggregationWithMissing(): void
     {
         // feature is buggy on version prior 7.5;
-        $this->_checkVersion('7.5');
+        // $this->_checkVersion('7.5');
 
         $agg = new Min('min_price');
         $agg->setField('price');

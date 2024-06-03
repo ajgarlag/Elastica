@@ -9,8 +9,8 @@ services:
             - 8000:8000
             - 8001:8001
         networks:
-            - elastic
+            - open
 
 networks:
-    elastic:
+    open:
         driver: bridge

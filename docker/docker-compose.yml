@@ -1,7 +1,7 @@
 version: '3.4'
 
 # This is a docker-compose template file for running docker's containers locally.
-# It must be combined with `docker-compose.es.yml`
+# It must be combined with `docker-compose.os.yml`
 # See: docker-start unit in Makefile
 
 services:
@@ -10,11 +10,11 @@ services:
         volumes:
             - ../:/var/www/html
         networks:
-            - elastic
+            - open
         environment:
-            - ES_HOST=es01
+            - ES_HOST=os01
             - PROXY_HOST=proxy
 
 networks:
-    elastic:
+    open:
         driver: bridge
